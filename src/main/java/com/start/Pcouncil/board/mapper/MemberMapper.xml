@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.start.Pcouncil.board.mapper.MemberMapper">
+	<select id="memExist" parameterType="String" resultType="String">
+		SELECT email
+		FROM user
+		WHERE email=#{email}
+	</select>
+	<select id="memSelect" parameterType="String" resultType="String">
+		SELECT *
+		FROM USER
+		WHERE email=#{email}
+	</select>
+	<insert id="memInsert" parameterType="com.start.Pcouncil.board.domain.MemberVO">
+		INSERT INTO
+		USER(email, photo, name)
+		VALUES(#{email},#{photo},#{name})
+	</insert>
+</mapper>

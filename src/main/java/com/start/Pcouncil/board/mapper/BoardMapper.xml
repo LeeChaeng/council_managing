@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.start.Pcouncil.board.mapper.BoardMapper">
+
+	<select id="boardCount" resultType="int">
+		SELECT count(*) FROM COMMUNITY;
+	</select>
+	
+	<select id="boardList" resultType="com.start.Pcouncil.board.domain.BoardVO">
+		SELECT BNO, TITLE, CONTENT, WRITER, date_format(REG_DATE,'%Y-%m-%d %h:%i:%s') as REG_DATE, HITS
+		FROM COMMUNITY;
+	</select>
+	
+	
+	<select id="boardDetail" parameterType="int" resultType="com.start.Pcouncil.board.domain.BoardVO">
+		SELECT *
+		FROM COMMUNITY
+		WHERE BNO = #{bno}	
+	</select>
+	
+	<insert id="boardInsert" parameterType="com.start.Pcouncil.board.domain.BoardVO">
+		INSERT INTO
+		COMMUNITY(BNO,TITLE,CONTENT,WRITER,REG_DATE,HITS)
+		VALUES(#{bno},#{title},#{content},#{writer},now(),${hits})
+	</insert>
+	
+	<update id="boardUpdate" parameterType="com.start.Pcouncil.board.domain.BoardVO">
+		UPDATE COMMUNITY
+		SET
+			<if test="title != null">
+				TITLE=#{title}
+			</if>
+			<if test="title != null and content != null">,</if>
+			<if test="content != null">
+				CONTENT = #{content}
+			</if>
+			WHERE BNO = #{bno}
+	</update>
+	
+	<delete id="boardDelete" parameterType="int">
+		DELETE FROM COMMUNITY WHERE BNO = #{bno}
+	</delete>
+	
+	<update id="boardHit" parameterType="int">
+		UPDATE COMMUNITY
+		SET
+			HITS=HITS+1
+		WHERE BNO = #{bno}
+	</update>
+	
+	<select id="boardPaging" parameterType="com.start.Pcouncil.board.domain.Criteria" resultType="com.start.Pcouncil.board.domain.BoardVO">
+		<![CDATA[
+			select
+			    bno, title, content, writer, reg_date, hits
+			from
+			    community
+			where bno > 0
+			order by bno desc, reg_date desc
+			limit #{pageStart}, #{perPageNum}
+		]]>
+	</select>
+	
+</mapper>
